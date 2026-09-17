@@ -29,6 +29,7 @@ body{
 }
 
 img{ width:100%; display:block; }
+video, svg, canvas, iframe{ max-width:100%; }
 a{ color:inherit; text-decoration:none; }
 
 .mono{
@@ -107,7 +108,7 @@ NAV
     position:fixed;
     top:0;
     left:0;
-    width:100%;
+    right:0;
 
     display:flex;
     justify-content:space-between;
@@ -184,7 +185,6 @@ OVERLAY DEL MENÚ
 .menu-overlay{
     position:fixed;
     inset:0;
-    width:100%;
     height:100vh;
     display:flex;
     align-items:center;
@@ -763,6 +763,8 @@ SERVICIOS + HERRAMIENTAS
     align-items:center;
 
     gap:8px;
+
+    min-width:0;
 }
 
 
@@ -1720,6 +1722,7 @@ PÁGINA DE DETALLE DE PROYECTO
     top: 0;
 
     height: 100vh;
+    min-width: 0;
 
     padding: 120px 3vw 50px 2vw;
 
@@ -1747,6 +1750,7 @@ PÁGINA DE DETALLE DE PROYECTO
 
 .project-name {
     padding-top: 2px;
+    min-width: 0;
 }
 
 .project-name p {
@@ -1859,7 +1863,7 @@ PÁGINA DE DETALLE DE PROYECTO
 ========================================================= */
 
 .project-gallery {
-    width: 100%;
+    min-width: 0;
 
     padding: 120px 5vw;
 
@@ -2224,13 +2228,37 @@ RESPONSIVE PÁGINA DE PROYECTO
 
     .project-sidebar-inner {
         display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
 
-        gap: 60px;
+        gap: 30px;
+    }
+
+    .project-info-content {
+        align-items: center;
+    }
+
+    .project-info-side {
+        align-items: center;
+    }
+
+    .project-meta-group {
+        align-items: center;
+    }
+
+    .tag-list {
+        justify-content: center;
     }
 
 
     .project-title {
         font-size: clamp(42px, 11vw, 72px);
+    }
+
+    .project-name p {
+        max-width: 28ch;
+        font-size: clamp(20px, 5vw, 28px);
     }
 
 
@@ -2289,7 +2317,7 @@ MÓVIL PEQUEÑO
     */
 
     .floatworks{
-        height:1650px;
+        height:auto;
         padding-left:5vw;
         padding-right:5vw;
     }
@@ -2351,11 +2379,6 @@ MÓVIL PEQUEÑO
     .project-info{
         padding-left:5vw;
         padding-right:5vw;
-    }
-
-    .project-gallery{
-        margin-left:5vw;
-        margin-right:5vw;
     }
 
     .project-next{
