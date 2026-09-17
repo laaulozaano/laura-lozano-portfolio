@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Trabajos — Laura Lozano</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://use.typekit.net/nhz4exj.css">
+</head>
+
+
+<body class="works-body">
+<div class="cursor"></div>
+    <!-- NAV -->
+
+    <nav class="menu">
+
+        <a href="index.html" class="logo">
+            LAULO
+        </a>
+
+        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+            <span></span>
+            <span></span>
+        </button>
+
+    </nav>
+
+
+    <!-- MENÚ -->
+
+    <div class="menu-overlay" id="menuOverlay">
+
+        <div class="menu-overlay-links">
+
+            <a href="Trabajos.html">Trabajos</a>
+            <a href="index.html#sobre-mi">Sobre mí</a>
+            <a href="index.html#contacto">Contacto</a>
+
+        </div>
+
+    </div>
+
+
+    <!-- PÁGINA -->
+
+    <main class="all-works">
+
+
+        <!-- CABECERA -->
+
+        <div class="all-works-header">
+
+            <p class="mono">
+                Selección de proyectos
+            </p>
+
+            <h1>
+                
+            </h1>
+
+        </div>
+
+
+        <!-- LISTA -->
+
+        <div class="projects-list">
+
+
+            <!-- PROYECTO 01 -->
+
+            <a href="LoQueEmpiezaADesaparecer.html"
+               class="project-row"
+               data-image="img/portada libro.png">
+
+                <span class="project-number mono">
+                    01
+                </span>
+
+                <span class="project-name">
+                    Lo que empieza a desaparecer sin hacer ruido
+                </span>
+
+                <span class="project-type mono">
+                    Editorial
+                </span>
+
+                <span class="project-year mono">
+                    2026
+                </span>
+
+            </a>
+
+
+            <!-- PROYECTO 02 -->
+
+            <a href="CasiCasi.html"
+               class="project-row"
+               data-image="img/casicasifoto.png">
+
+                <span class="project-number mono">
+                    02
+                </span>
+
+                <span class="project-name">
+                    Casicasi
+                </span>
+
+                <span class="project-type mono">
+                    Editorial
+                </span>
+
+                <span class="project-year mono">
+                    2026
+                </span>
+
+            </a>
+
+
+            <!-- PROYECTO 03 -->
+
+            <a href="3dNike.html"
+               class="project-row"
+               data-image="img/LOZANO.LAURA_3.1_ZAPATILLA_RENDERL1.jpg">
+
+                <span class="project-number mono">
+                    03
+                </span>
+
+                <span class="project-name">
+                    Modelado 3D Nike
+                </span>
+
+                <span class="project-type mono">
+                    Modelado 3D
+                </span>
+
+                <span class="project-year mono">
+                    2025
+                </span>
+
+            </a>
+
+
+            <!-- PROYECTO 04 -->
+
+            <a href="FotosTwinPeaks.html"
+               class="project-row"
+               data-image="img/Audrey.jpg">
+
+                <span class="project-number mono">
+                    04
+                </span>
+
+                <span class="project-name">
+                    Twin Peaks
+                </span>
+
+                <span class="project-type mono">
+                    Fotografía
+                </span>
+
+                <span class="project-year mono">
+                    2025
+                </span>
+
+            </a>
+
+
+            <!-- PROYECTO 05 -->
+
+            <a href="Pepi33.html"
+               class="project-row"
+               data-image="img/cervezas.png">
+
+                <span class="project-number mono">
+                    05
+                </span>
+
+                <span class="project-name">
+                    PEPI33
+                </span>
+
+                <span class="project-type mono">
+                    Packaging
+                </span>
+
+                <span class="project-year mono">
+                    2025
+                </span>
+
+            </a>
+
+
+        </div>
+
+
+        <!-- IMAGEN QUE APARECE -->
+
+        <div class="project-preview" id="projectPreview">
+
+            <img id="projectPreviewImage" src="" alt="">
+
+        </div>
+
+
+    </main>
+
+
+   <script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const rows = document.querySelectorAll(".project-row");
+
+    const preview = document.getElementById("projectPreview");
+    const previewImage = document.getElementById("projectPreviewImage");
+
+    const positions = [
+        {
+            x: "-15px",
+            y: "-35px",
+            rotation: "-2deg"
+        },
+        {
+            x: "25px",
+            y: "15px",
+            rotation: "1.5deg"
+        },
+        {
+            x: "-20px",
+            y: "35px",
+            rotation: "-1deg"
+        },
+        {
+            x: "30px",
+            y: "-20px",
+            rotation: "2deg"
+        },
+        {
+            x: "-25px",
+            y: "20px",
+            rotation: "-1.5deg"
+        }
+    ];
+
+
+    rows.forEach(function(row, index) {
+
+        row.addEventListener("mouseenter", function() {
+
+            const image = row.getAttribute("data-image");
+
+            const position =
+                positions[index % positions.length];
+
+
+            previewImage.src = image;
+
+
+            preview.style.setProperty(
+                "--preview-x",
+                position.x
+            );
+
+            preview.style.setProperty(
+                "--preview-y",
+                position.y
+            );
+
+            preview.style.setProperty(
+                "--preview-rotation",
+                position.rotation
+            );
+
+
+            preview.classList.add("visible");
+
+        });
+
+
+        row.addEventListener("mouseleave", function() {
+
+            preview.classList.remove("visible");
+
+        });
+
+    });
+
+
+    /*=====================================================
+    CURSOR
+    =====================================================*/
+
+    const cursor = document.querySelector(".works-body .cursor");
+
+    if(cursor){
+
+        document.addEventListener("mousemove", function(e){
+
+            cursor.style.left = e.clientX + "px";
+            cursor.style.top = e.clientY + "px";
+
+        });
+
+
+        rows.forEach(function(row){
+
+            row.addEventListener("mouseenter", function(){
+
+                cursor.classList.add("active");
+
+            });
+
+            row.addEventListener("mouseleave", function(){
+
+                cursor.classList.remove("active");
+
+            });
+
+        });
+
+    }
+
+});
+
+</script>
+
+    <script src="main.js"></script>
+
+</body>
+
+</html>

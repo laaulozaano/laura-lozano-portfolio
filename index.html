@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laura Lozano — Diseño gráfico</title>
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.typekit.net/nhz4exj.css">
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+
+<!-- NAV -->
+<nav class="menu">
+
+  <a href="#hero" class="logo">LAULO</a>
+
+  <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+    <span></span>
+    <span></span>
+  </button>
+
+</nav>
+
+<div class="menu-overlay" id="menuOverlay">
+
+  <div class="menu-overlay-links">
+
+    <a href="Trabajos.html">Trabajos</a>
+    <a href="#sobre-mi">Sobre mí</a>
+    <a href="#contacto">Contacto</a>
+
+  </div>
+
+</div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <p class="hero-role">Diseñadora gráfica — Madrid</p>
+  <h1 class="hero-name" id="heroName" aria-label="Laura Lozano">
+
+    <span class="word-wrap ww1">
+        <span class="word-ghost">Laura</span>
+        <span class="word-fill">Laura</span>
+    </span>
+
+    <div class="hero-auto-gallery" id="heroAutoGallery">
+
+        <div class="hero-auto-slide active">
+            <img src="img/portada libro.png" alt="">
+        </div>
+
+        <div class="hero-auto-slide">
+            <img src="img/casicasifoto.png" alt="">
+        </div>
+
+        <div class="hero-auto-slide">
+            <img src="img/Audrey.jpg" alt="">
+        </div>
+
+        <div class="hero-auto-slide">
+            <img src="img/cervezas.png" alt="">
+        </div>
+
+    </div>
+
+    <span class="word-wrap ww2">
+        <span class="word-ghost">Lozano</span>
+        <span class="word-fill">Lozano</span>
+    </span>
+
+</h1>
+</section>
+
+<!-- TRABAJOS: 5 piezas flotando, sin retícula -->
+<section class="floatworks" id="trabajos">
+  <div class="floatworks-phrase">
+    <p>Esto es lo que pasa cuando<br>me pongo a hacer cosas</p>
+  </div>
+
+  <p class="floatworks-eyebrow mono">Algunos de mis trabajos</p>
+
+  <a href="LoQueEmpiezaADesaparecer.html" class="float-item f1">
+    <span class="float-index mono">01</span>
+    <img src="img/portada libro.png" alt="">
+    <div class="float-info">
+      <h3>Lo que empieza a desaparecer sin hacer ruido</h3>
+      <span class="mono">Editorial</span>
+    </div>
+  </a>
+
+  <a href="CasiCasi.html" class="float-item f2">
+    <span class="float-index mono">02</span>
+    <img src="img/casicasifoto.png" alt="">
+    <div class="float-info">
+      <h3>Casicasi</h3>
+      <span class="mono">Editorial</span>
+    </div>
+  </a>
+
+  <a href="3dNike.html" class="float-item f3">
+    <span class="float-index mono">03</span>
+    <video src="video/Lozano.Laura_SpotZapatilla30fps.mp4" autoplay muted loop playsinline></video>
+    <div class="float-info">
+      <h3>Modelado 3D Nike</h3>
+      <span class="mono">Modelado 3D</span>
+    </div>
+  </a>
+
+  <a href="FotosTwinPeaks.html" class="float-item f4">
+    <span class="float-index mono">04</span>
+    <img src="img/Audrey.jpg" alt="">
+    <div class="float-info">
+      <h3>Sesión fotográfica - Twin Peaks</h3>
+      <span class="mono">Dirección de arte y fotografía</span>
+    </div>
+  </a>
+
+  <a href="Pepi33.html" class="float-item f5">
+    <span class="float-index mono">05</span>
+    <img src="img/cervezas.png" alt="">
+    <div class="float-info">
+      <h3>PEPI33</h3>
+      <span class="mono">Packaging</span>
+    </div>
+  </a>
+
+  <a href="Trabajos.html" class="worklist-all mono">Ver todos los proyectos →</a>
+</section>
+
+<!-- SOBRE MÍ -->
+<section class="about-stage" id="sobre-mi">
+
+  <div class="about-sticky">
+
+    <!-- FOTO FIJA — imagen distinta según pantalla:
+         más vertical en móvil para que no haya que recortarla mal.
+         Sustituye "img/fotoojopezLETRA-vertical.jpg" por tu foto vertical real. -->
+    <div class="about-background">
+      <picture>
+        <source media="(max-width:900px)" srcset="img/fotoojopezLETRAvertical.png">
+        <img src="img/fotoojopezLETRA.png" alt="Laura Lozano">
+      </picture>
+    </div>
+
+    <!-- CAPA QUE SUBE -->
+    <div class="about-overlay">
+
+      <div class="about-content">
+
+        <p class="about-eyebrow mono">Sobre mí</p>
+
+        <div class="about-main">
+
+          <p class="about-bio">
+            Holaa, te preguntarás quién soy yo. <br>
+
+            Pues soy un nervio con patas que no sabe estar quieta. De las que empieza una cosa y acaba haciendo otras tres por el camino. De las que echa macarrones a ojo y luego se sorprende cuando hay para alimentar a 12 personas. De las que llora viendo una peli cuando dos se enamoran al final, aunque lleve hora y media sabiendo que iban a acabar juntos. <br>
+
+            También soy bastante cabezota cuando tengo una idea en la cabeza. Me gusta probar hasta encontrar esa pequeña cosa que hace que todo encaje. Soy de las que se fija en detalles que probablemente nadie más va a ver, pero que para mí cambian completamente el resultado. <br>
+
+            Estudié Diseño Gráfico y Multimedia en UDIT y ahora intento convertir todo este nervio en algo útil: ideas, proyectos y muchas horas delante del ordenador
+          </p>
+
+        </div>
+
+        <div class="about-details">
+
+          <div class="about-detail">
+            <p class="mono">Servicios</p>
+
+            <span>Identidad visual</span>
+            <span>Editorial</span>
+            <span>Dirección de arte</span>
+            <span>Packaging</span>
+            <span>Motion</span>
+          </div>
+
+          <div class="about-detail">
+            <p class="mono">Herramientas</p>
+
+            <span>Illustrator</span>
+            <span>InDesign</span>
+            <span>Photoshop</span>
+            <span>After Effects</span>
+            <span>Cinema 4D</span>
+            <span>Figma</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- CIERRE / CONTACTO -->
+<footer class="cta" id="contacto">
+  <div class="cta-social mono">
+    <a href="#">Instagram</a>
+    <a href="#">LinkedIn</a>
+  </div>
+
+  <h2 class="cta-title">nos vemos pronto :)</h2>
+  <a href="mailto:hola@lauralozano.com" class="cta-link">hola@lauralozano.com</a>
+
+  <div class="cta-bottom mono">
+    <span>Madrid, España</span>
+    <span>© 2026 Laura Lozano</span>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>
