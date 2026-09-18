@@ -15,6 +15,79 @@ RESET Y TOKENS
 
 html{ scroll-behavior:smooth; }
 
+/*=========================================================
+TIPOGRAFÍA CINÉTICA
+- .reveal-words: cada palabra sube y aparece con un pequeño
+  retardo entre sí, activado al entrar en el viewport.
+- .scroll-reactive: el bloque entero se inclina/estira según
+  la velocidad de scroll (efecto "Léo Parpeix"), vía JS.
+=========================================================*/
+
+.reveal-words .word{
+    display:inline-block;
+    overflow:hidden;
+    vertical-align:top;
+}
+
+.reveal-words .word-inner{
+    display:inline-block;
+    transform:translateY(115%);
+    transition:transform .7s cubic-bezier(.16,1,.3,1);
+    transition-delay:calc(var(--i) * 0.035s);
+}
+
+.reveal-words.is-visible .word-inner{
+    transform:translateY(0);
+}
+
+.scroll-reactive{
+    display:inline-block;
+    will-change:transform;
+    transform-origin:center;
+}
+
+/*=========================================================
+HILO COSIDO
+Línea tipo hilo de coser que se va trazando sola mientras
+se hace scroll por la sección de trabajos, conectando las
+tarjetas flotantes. Referencia al taller de tapicería.
+Solo en desktop: en móvil las tarjetas se apilan y el
+recorrido del hilo ya no tendría sentido visual.
+=========================================================*/
+
+.floatworks-thread{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:0;
+    pointer-events:none;
+}
+
+/*=========================================================
+PERSONAJE 3D
+Blob orgánico que se retuerce y recorre la pantalla mientras
+navegas. Fijo respecto al viewport, no bloquea clics.
+Solo desktop (ver JS: se desactiva por media query, WebGL o
+reduced-motion). z-index por debajo del nav (1001) y del
+overlay del menú (1000), por encima del contenido normal.
+=========================================================*/
+
+#blobCanvas{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:500;
+    pointer-events:none;
+}
+
+@media (max-width:900px){
+    #blobCanvas{
+        display:none;
+    }
+}
+
 @media (prefers-reduced-motion: reduce){
     html{ scroll-behavior:auto; }
     *{ animation-duration:.01ms !important; transition-duration:.01ms !important; }
@@ -578,7 +651,7 @@ SOBRE MÍ
 =========================*/
 .about-stage{
     position:relative;
-    height:220vh;
+    height:340vh;
     width:100%;
 }
 
@@ -678,10 +751,12 @@ CONTENIDO
     width:100%;
     height:100%;
 
-    padding:7vh 2vw;
+    padding:5vh 2vw;
 
     display:flex;
     flex-direction:column;
+
+    overflow-y:auto;
 }
 
 
@@ -720,17 +795,26 @@ BLOQUE PRINCIPAL
 
 .about-bio{
 
-    max-width:60ch;
+    max-width:62ch;
 
-    font-size:15px;
+    font-size:clamp(16px, 1.15vw, 19px);
 
-    line-height:1.65;
+    line-height:1.5;
 
     font-weight:300;
 
     color:var(--fg-soft);
 
     margin-bottom:14px;
+}
+
+.about-bio .bio-word{
+    color:rgba(243,241,234,.16);
+    transition:color .35s ease;
+}
+
+.about-bio .bio-word.is-active{
+    color:var(--fg);
 }
 
 
@@ -778,20 +862,62 @@ SERVICIOS + HERRAMIENTAS
 }
 
 
+.about-detail{
+    margin-top:20px;
+}
+
 .about-detail span{
+
+    position:relative;
 
     font-size:13px;
 
     color:var(--fg);
 
-    padding-right:12px;
+    padding:8px 14px;
 
-    border-right:1px solid var(--line);
+    border:1px solid var(--line);
+    border-radius:100px;
+
+    background:rgba(243,241,234,.04);
+
+    opacity:0;
+
+    transform-origin:top center;
+
+    transition:opacity .3s ease, background .25s ease, border-color .25s ease;
 }
 
+/* el hilo del que cuelga */
+.about-detail span::before{
+    content:"";
+    position:absolute;
+    top:-20px;
+    left:50%;
+    width:1px;
+    height:20px;
+    background:var(--line);
+    transform:translateX(-50%);
+    opacity:0;
+    transition:opacity .3s ease;
+}
 
-.about-detail span:last-child{
-    border-right:0;
+.about-detail span.is-dropped{
+    opacity:1;
+}
+
+.about-detail span.is-dropped::before{
+    opacity:1;
+}
+
+.about-detail span:hover{
+    background:rgba(243,241,234,.1);
+    border-color:var(--fg-soft);
+}
+
+/* fallback: sin animación, siempre visibles */
+.about-details.is-visible .about-detail span{
+    opacity:1;
 }
 
 /*=========================
@@ -799,7 +925,7 @@ CIERRE / CONTACTO
 =========================*/
 
 .cta{
-    padding:120px 5vw 40px;
+    padding:120px 2vw 40px;
     display:flex;
     flex-direction:column;
     align-items:flex-start;
@@ -1566,7 +1692,7 @@ RESPONSIVE INDEX
     SOBRE MÍ
     =========================*/
 .about-stage{
-    height:200vh;
+    height:300vh;
 }
 
 
@@ -1631,11 +1757,11 @@ RESPONSIVE INDEX
 
 .about-bio{
 
-    font-size:14px;
+    font-size:clamp(15px, 3.6vw, 17px);
 
     max-width:46ch;
 
-    line-height:1.6;
+    line-height:1.45;
 
 }
 
@@ -2108,6 +2234,10 @@ RESPONSIVE PÁGINA DE PROYECTO
         height:auto;
         padding:80px 5vw 60px;
         overflow:hidden;
+    }
+
+    .floatworks-thread{
+        display:none;
     }
 
     /* La frase de fondo desaparece en móvil/tablet */

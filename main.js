@@ -1,3 +1,6 @@
+/* Se usa en varios sitios del archivo, por eso va aquí arriba */
+const prefersReducedMotion =
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /*=========================
 MENÚ DESPLEGABLE
@@ -156,6 +159,209 @@ SOBRE MÍ — CAPA QUE SUBE CON EL SCROLL
 const aboutStage = document.querySelector(".about-stage");
 const aboutOverlay = document.querySelector(".about-overlay");
 const aboutImage = document.querySelector(".about-background img");
+const aboutBio = document.querySelector(".about-bio");
+const aboutDetails = document.querySelector(".about-details");
+
+let bioWords = [];
+let lastBioActiveCount = -1;
+
+if (aboutBio) {
+
+    function wrapBioWords(el) {
+
+        function processNode(node) {
+
+            if (node.nodeType === Node.TEXT_NODE) {
+
+                const parts = node.textContent.split(/(\s+)/);
+                const frag = document.createDocumentFragment();
+
+                parts.forEach((part) => {
+
+                    if (part.trim() === "") {
+                        frag.appendChild(document.createTextNode(part));
+                        return;
+                    }
+
+                    const span = document.createElement("span");
+                    span.className = "bio-word";
+                    span.textContent = part;
+                    bioWords.push(span);
+
+                    frag.appendChild(span);
+
+                });
+
+                node.replaceWith(frag);
+
+            } else if (node.nodeType === Node.ELEMENT_NODE) {
+
+                Array.from(node.childNodes).forEach(processNode);
+
+            }
+
+        }
+
+        Array.from(el.childNodes).forEach(processNode);
+
+    }
+
+    if (prefersReducedMotion) {
+
+        aboutBio.style.color = "var(--fg)";
+
+    } else {
+
+        wrapBioWords(aboutBio);
+
+    }
+
+}
+
+/*=========================================================
+CHIPS COLGANDO — físicas de péndulo amortiguado
+Cada chip cuelga de un hilo y cae + oscila con inercia real
+al mostrarse, y se esconden si se vuelve a subir en el scroll.
+=========================================================*/
+
+const skillChips = Array.from(
+    document.querySelectorAll(".about-detail span")
+);
+
+let showChips = () => {};
+let hideChips = () => {};
+
+if (skillChips.length && aboutDetails) {
+
+    if (prefersReducedMotion) {
+
+        showChips = () => {
+            aboutDetails.classList.add("is-visible");
+        };
+
+        hideChips = () => {
+            aboutDetails.classList.remove("is-visible");
+        };
+
+    } else {
+
+        const DROP_START_Y = -220;
+
+        const chipStates = skillChips.map((el, i) => ({
+            el,
+            y: DROP_START_Y,
+            velocityY: 0,
+            x: 0,
+            velocityX: 0,
+            angle: (Math.random() - 0.5) * 10,
+            angularVelocity: 0,
+            restAngle: (Math.random() - 0.5) * 16,
+            restX: (Math.random() - 0.5) * 22,
+            released: false,
+            index: i
+        }));
+
+        let chipsVisible = false;
+        let chipScrollVelocity = 0;
+        let lastChipScrollY = window.scrollY;
+
+        showChips = () => {
+
+            if (chipsVisible) return;
+            chipsVisible = true;
+
+            aboutDetails.classList.add("is-visible");
+
+            chipStates.forEach((state) => {
+
+                setTimeout(() => {
+
+                    state.y = DROP_START_Y;
+                    state.velocityY = 0;
+                    state.x = state.restX * 0.3;
+                    state.velocityX = 0;
+                    state.angularVelocity = (Math.random() - 0.5) * 140;
+                    state.released = true;
+
+                }, state.index * 90);
+
+            });
+
+        };
+
+        hideChips = () => {
+
+            if (!chipsVisible) return;
+            chipsVisible = false;
+
+            aboutDetails.classList.remove("is-visible");
+
+            chipStates.forEach((state) => {
+                state.released = false;
+            });
+
+        };
+
+        function chipsPhysicsLoop() {
+
+            const currentScrollY = window.scrollY;
+            const rawVel = currentScrollY - lastChipScrollY;
+            lastChipScrollY = currentScrollY;
+            chipScrollVelocity += (rawVel - chipScrollVelocity) * 0.15;
+
+            const scrollTorque =
+                Math.max(-30, Math.min(30, chipScrollVelocity * 0.8));
+
+            chipStates.forEach((state) => {
+
+                if (!state.released) return;
+
+                /* caída vertical, como si tirase de ella la gravedad
+                   y el hilo la frenase de golpe */
+                const ySpring = 0.02;
+                const yDamping = 0.82;
+
+                state.velocityY += -state.y * ySpring;
+                state.velocityY *= yDamping;
+                state.y += state.velocityY;
+
+                /* deriva lateral hasta su posición de reposo */
+                const xSpring = 0.02;
+                const xDamping = 0.85;
+
+                state.velocityX += (state.restX - state.x) * xSpring;
+                state.velocityX *= xDamping;
+                state.x += state.velocityX;
+
+                /* balanceo, como un cartel colgado, hasta su
+                   propio ángulo de reposo (no todos a cero) */
+                const angleSpring = 0.012;
+                const angleDamping = 0.92;
+
+                state.angularVelocity +=
+                    ((state.restAngle - state.angle) * angleSpring) +
+                    (scrollTorque * 0.01);
+                state.angularVelocity *= angleDamping;
+                state.angle += state.angularVelocity;
+
+                state.el.style.transform =
+                    `translate(${state.x.toFixed(1)}px, ${state.y.toFixed(1)}px) rotate(${state.angle.toFixed(2)}deg)`;
+
+                /* el hilo se estira mientras cae */
+                const threadLen = 26 + Math.max(0, -state.y) * 0.6;
+                state.el.style.setProperty("--thread-len", `${threadLen.toFixed(1)}px`);
+
+            });
+
+            requestAnimationFrame(chipsPhysicsLoop);
+
+        }
+
+        requestAnimationFrame(chipsPhysicsLoop);
+
+    }
+
+}
 
 if (aboutStage && aboutOverlay) {
 
@@ -181,13 +387,23 @@ if (aboutStage && aboutOverlay) {
 
         progress = Math.max(0, Math.min(1, progress));
 
+        /*
+        Separamos el recorrido en dos tramos:
+        - overlayProgress: sube la capa (primer 40% del scroll)
+        - readProgress: colorea el texto y saca los chips,
+          durante el 60% restante, cuando ya se puede leer.
+        */
+
+        const overlayProgress = Math.max(0, Math.min(1, progress / 0.4));
+        const readProgress = Math.max(0, Math.min(1, (progress - 0.4) / 0.6));
+
 
         /*
         La capa empieza abajo
         y termina completamente arriba.
         */
 
-        const translateY = 100 - (progress * 100);
+        const translateY = 100 - (overlayProgress * 100);
 
         aboutOverlay.style.transform =
             `translateY(${translateY}%)`;
@@ -200,15 +416,49 @@ if (aboutStage && aboutOverlay) {
 
         if (aboutImage) {
 
-            const blur = progress * 8;
+            const blur = overlayProgress * 8;
 
-            const scale = 1 + (progress * 0.04);
+            const scale = 1 + (overlayProgress * 0.04);
 
             aboutImage.style.filter =
                 `blur(${blur}px)`;
 
             aboutImage.style.transform =
                 `scale(${scale})`;
+        }
+
+
+        /*
+        Las palabras del bio se van coloreando
+        ya con la capa colocada, mientras se lee.
+        */
+
+        if (bioWords.length) {
+
+            const activeCount = Math.round(readProgress * bioWords.length);
+
+            if (activeCount !== lastBioActiveCount) {
+
+                bioWords.forEach((word, i) => {
+                    word.classList.toggle("is-active", i < activeCount);
+                });
+
+                lastBioActiveCount = activeCount;
+
+            }
+
+        }
+
+
+        /*
+        Los chips de Servicios/Herramientas se sueltan
+        cerca del final de ese mismo tramo de lectura.
+        */
+
+        if (readProgress > 0.7) {
+            showChips();
+        } else {
+            hideChips();
         }
 
     }
@@ -346,5 +596,92 @@ if (contactInteraction) {
         contactInteraction.classList.toggle("touch-active");
 
     });
+
+}
+
+/*=========================================================
+TIPOGRAFÍA CINÉTICA
+1) .reveal-words: divide el texto en palabras y las revela
+   una a una (con retardo) al entrar en pantalla.
+2) .scroll-reactive: el bloque se inclina/estira según la
+   velocidad del scroll, y vuelve solo a su sitio al parar.
+Respeta "prefers-reduced-motion" (variable declarada arriba
+del todo del archivo).
+=========================================================*/
+
+/* --- 1) Revelado de palabras --- */
+
+function splitIntoWords(el) {
+
+    let wordIndex = 0;
+
+    function processNode(node) {
+
+        if (node.nodeType === Node.TEXT_NODE) {
+
+            const parts = node.textContent.split(/(\s+)/);
+            const frag = document.createDocumentFragment();
+
+            parts.forEach((part) => {
+
+                if (part.trim() === "") {
+                    frag.appendChild(document.createTextNode(part));
+                    return;
+                }
+
+                const outer = document.createElement("span");
+                outer.className = "word";
+
+                const inner = document.createElement("span");
+                inner.className = "word-inner";
+                inner.style.setProperty("--i", wordIndex++);
+                inner.textContent = part;
+
+                outer.appendChild(inner);
+                frag.appendChild(outer);
+
+            });
+
+            node.replaceWith(frag);
+
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+
+            Array.from(node.childNodes).forEach(processNode);
+
+        }
+
+    }
+
+    Array.from(el.childNodes).forEach(processNode);
+
+}
+
+const revealWordsEls = document.querySelectorAll(".reveal-words");
+
+if (revealWordsEls.length) {
+
+    revealWordsEls.forEach(splitIntoWords);
+
+    if (prefersReducedMotion) {
+
+        revealWordsEls.forEach((el) => el.classList.add("is-visible"));
+
+    } else {
+
+        const wordObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("is-visible");
+                        wordObserver.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0.4 }
+        );
+
+        revealWordsEls.forEach((el) => wordObserver.observe(el));
+
+    }
 
 }
