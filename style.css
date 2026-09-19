@@ -502,12 +502,12 @@ HERO
 
 .word-fill{
     position:absolute;
-    top:-2px;
-    left:-2px;
+    top:0;
+    left:0;
     color:var(--fg);
     -webkit-text-stroke:0;
     white-space:nowrap;
-    clip-path:inset(0 100% 0 0);
+    clip-path:inset(-25% 100% -25% 0);
     animation:fillName 1s cubic-bezier(.65,0,.35,1) forwards;
 }
 
@@ -521,7 +521,7 @@ HERO
 
 @keyframes fillName{
     to{
-        clip-path:inset(-3px -3px -3px 0);
+        clip-path:inset(-25% -25% -25% 0);
     }
 }
 
@@ -1565,11 +1565,11 @@ RESPONSIVE INDEX
     */
 
     .hero.split .ww1{
-        transform:translateY(-1.15em);
+        transform:translateY(-1.6em);
     }
 
     .hero.split .ww2{
-        transform:translateY(1.15em);
+        transform:translateY(1.6em);
     }
 
     /*
