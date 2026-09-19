@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Laura Lozano — Diseño gráfico</title>
+<script>(function(){try{var t=localStorage.getItem('laulo-theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();</script>
 <link rel="stylesheet" href="style.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,10 +20,13 @@
 
   <a href="#hero" class="logo">LAULO</a>
 
-  <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+  <div class="nav-actions">
+    <button class="theme-toggle" id="themeToggle" aria-label="Cambiar a modo claro">☾</button>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
     <span></span>
     <span></span>
   </button>
+  </div>
 
 </nav>
 
@@ -141,9 +145,13 @@
          más vertical en móvil para que no haya que recortarla mal.
          Sustituye "img/fotoojopezLETRA-vertical.jpg" por tu foto vertical real. -->
     <div class="about-background">
-      <picture>
-        <source media="(max-width:900px)" srcset="img/fotoojopezLETRAvertical.png">
-        <img src="img/fotoojopezLETRA.png" alt="Laura Lozano">
+      <picture class="theme-img theme-img-dark">
+        <source media="(max-width:900px)" srcset="img/fotoojopezLETRAblack movil.png">
+        <img src="img/fotoojopezLETRA para black.png" alt="Laura Lozano">
+      </picture>
+      <picture class="theme-img theme-img-light">
+        <source media="(max-width:900px)" srcset="img/fotoojopezLETRAlight movil.png">
+        <img src="img/fotoojopezLETRA para light.png" alt="Laura Lozano">
       </picture>
     </div>
 

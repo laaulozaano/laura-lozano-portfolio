@@ -8,9 +8,32 @@ RESET Y TOKENS
     --bg:#0B0B0A;
     --fg:#F3F1EA;
     --fg-soft:#9C9890;
+    --fg-dim:rgba(243,241,234,.25);
+    --fg-dim-2:rgba(243,241,234,.16);
     --accent:#3881bc;
     --cursor-color:#3881bc;
     --line:rgba(243,241,234,.15);
+    --overlay-strong:rgba(11,11,10,.82);
+    --overlay-soft:rgba(11,11,10,.72);
+    --overlay-soft-mobile:rgba(11,11,10,.78);
+}
+
+:root[data-theme="light"]{
+    --bg:#F3F1EA;
+    --fg:#0B0B0A;
+    --fg-soft:#5A564E;
+    --fg-dim:rgba(11,11,10,.25);
+    --fg-dim-2:rgba(11,11,10,.16);
+    --line:rgba(11,11,10,.15);
+    --overlay-strong:rgba(243,241,234,.85);
+    --overlay-soft:rgba(243,241,234,.8);
+    --overlay-soft-mobile:rgba(243,241,234,.84);
+}
+
+/* transición suave al cambiar de tema */
+body, .menu-overlay, .about-overlay, .about-sticky, .about-detail span,
+.cursor, .cta, nav.menu{
+    transition: background-color .35s ease, color .35s ease;
 }
 
 html{ scroll-behavior:smooth; }
@@ -194,6 +217,14 @@ NAV
     mix-blend-mode:difference;
 }
 
+:root[data-theme="light"] .menu{
+    mix-blend-mode:normal;
+    background:rgba(243,241,234,.75);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+}
+
 .logo{
     font-size:25px;
     font-weight:1000;
@@ -204,6 +235,45 @@ NAV
 
 
 /* BOTÓN HAMBURGUESA */
+
+/* BOTÓN MODO CLARO/OSCURO */
+
+.theme-toggle{
+    position:relative;
+
+    width:36px;
+    height:36px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border:1px solid var(--line);
+    border-radius:50%;
+    background:transparent;
+    color:var(--fg);
+
+    font-size:15px;
+    line-height:1;
+
+    cursor:none;
+
+    z-index:1002;
+
+    transition:border-color .3s ease, transform .3s ease;
+}
+
+.theme-toggle:hover{
+    border-color:var(--fg-soft);
+    transform:scale(1.08);
+}
+
+
+.nav-actions{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
 
 .menu-toggle{
     position:relative;
@@ -264,7 +334,7 @@ OVERLAY DEL MENÚ
     justify-content:center;
 
     /* Fondo oscuro */
-    background:rgba(11,11,10,.82);
+    background:var(--overlay-strong);
 
     /* Desenfoca lo que queda detrás */
     backdrop-filter:blur(18px);
@@ -307,7 +377,7 @@ OVERLAY DEL MENÚ
     line-height:.95;
     letter-spacing:-.05em;
 
-    color:rgba(243,241,234,.25);
+    color:var(--fg-dim);
 
     transition:
         color .35s ease,
@@ -667,7 +737,7 @@ CONTENEDOR QUE SE QUEDA FIJO
     height:100vh;
 
     overflow:hidden;
-    background:#0B0B0A;
+    background:var(--bg);
 }
 
 
@@ -684,6 +754,18 @@ FOTO DE FONDO
     justify-content:center;
 
     z-index:0;
+}
+
+.theme-img-light{
+    display:none;
+}
+
+:root[data-theme="light"] .theme-img-dark{
+    display:none;
+}
+
+:root[data-theme="light"] .theme-img-light{
+    display:block;
 }
 
 
@@ -733,7 +815,7 @@ CAPA QUE SUBE
 
     transform:translateY(100%);
 
-    background:rgba(11,11,10,.72);
+    background:var(--overlay-soft);
 
     backdrop-filter:blur(22px);
     -webkit-backdrop-filter:blur(22px);
@@ -809,7 +891,7 @@ BLOQUE PRINCIPAL
 }
 
 .about-bio .bio-word{
-    color:rgba(243,241,234,.16);
+    color:var(--fg-dim-2);
     transition:color .35s ease;
 }
 
@@ -824,100 +906,91 @@ SERVICIOS + HERRAMIENTAS
 
 .about-details{
 
-    margin-top:auto;
+    position:absolute;
+    inset:0;
 
-    display:grid;
+    width:100%;
+    height:100%;
 
-    grid-template-columns:1fr 1fr;
+    opacity:0;
+    pointer-events:none;
 
-    gap:60px;
+    transition:opacity .4s ease;
 
-    padding-top:40px;
+    z-index:5;
+}
 
-    border-top:1px solid var(--line);
+.about-details.is-visible{
+    opacity:1;
+    pointer-events:auto;
+}
+
+/* la cuerda de la que cuelgan todos */
+.about-details::before{
+    content:"";
+    position:absolute;
+    top:14%;
+    left:8%;
+    right:8%;
+    height:1px;
+    background:var(--line);
 }
 
 
+/* ya no organiza en columnas: solo agrupa en el DOM */
 .about-detail{
-
-    display:flex;
-
-    flex-wrap:wrap;
-
-    align-items:center;
-
-    gap:8px;
-
-    min-width:0;
+    display:contents;
 }
 
 
 .about-detail .mono{
-
-    width:100%;
-
-    color:var(--fg-soft);
-
-    margin-bottom:8px;
+    display:none;
 }
 
-
-.about-detail{
-    margin-top:20px;
-}
 
 .about-detail span{
 
-    position:relative;
+    position:absolute;
 
-    font-size:13px;
+    font-size:24px;
 
     color:var(--fg);
 
-    padding:8px 14px;
+    padding:0.55em 1.05em;
 
-    border:1px solid var(--line);
+    border:1px solid rgba(0,0,0,.15);
     border-radius:100px;
 
-    background:rgba(243,241,234,.04);
-
-    opacity:0;
+    box-shadow:0 8px 20px rgba(0,0,0,.35);
 
     transform-origin:top center;
 
-    transition:opacity .3s ease, background .25s ease, border-color .25s ease;
-}
-
-/* el hilo del que cuelga */
-.about-detail span::before{
-    content:"";
-    position:absolute;
-    top:-20px;
-    left:50%;
-    width:1px;
-    height:20px;
-    background:var(--line);
-    transform:translateX(-50%);
-    opacity:0;
-    transition:opacity .3s ease;
-}
-
-.about-detail span.is-dropped{
-    opacity:1;
-}
-
-.about-detail span.is-dropped::before{
-    opacity:1;
+    transition:filter .25s ease;
 }
 
 .about-detail span:hover{
-    background:rgba(243,241,234,.1);
-    border-color:var(--fg-soft);
+    filter:brightness(1.12);
 }
 
-/* fallback: sin animación, siempre visibles */
-.about-details.is-visible .about-detail span{
-    opacity:1;
+/* paleta de colores, uno distinto cada 6 chips */
+
+.about-detail span:nth-of-type(6n+1){ background:#2F7FE0; }
+.about-detail span:nth-of-type(6n+2){ background:#FF6F3C; }
+.about-detail span:nth-of-type(6n+3){ background:#2FAE8C; }
+.about-detail span:nth-of-type(6n+4){ background:#F5C84C; color:#1a1a18; }
+.about-detail span:nth-of-type(6n+5){ background:#E0559B; }
+.about-detail span:nth-of-type(6n+6){ background:#8B5FE0; }
+
+/* el hilo del que cuelga, se estira mientras cae */
+.about-detail span::before{
+    content:"";
+    position:absolute;
+    top:calc(-1 * var(--thread-len, 26px));
+    left:50%;
+    width:1px;
+    height:var(--thread-len, 26px);
+    background:var(--line);
+    transform:translateX(-50%);
 }
 
 /*=========================
@@ -1721,7 +1794,7 @@ RESPONSIVE INDEX
 
 .about-overlay{
 
-    background:rgba(11,11,10,.78);
+    background:var(--overlay-soft-mobile);
 
     backdrop-filter:blur(18px);
     -webkit-backdrop-filter:blur(18px);
@@ -1766,38 +1839,8 @@ RESPONSIVE INDEX
 }
 
 
-/* DETALLES */
-
-.about-details{
-
-    grid-template-columns:1fr;
-
-    gap:24px;
-
-    padding-top:25px;
-
-}
-
-
-.about-detail{
-
-    gap:7px;
-
-}
-
-
-.about-detail .mono{
-
-    margin-bottom:4px;
-
-}
-
-
-.about-detail span{
-
-    font-size:12px;
-
-}
+/* DETALLES — la posición y tamaño de cada chip los pone JS,
+   aquí no hace falta nada extra en móvil */
 
     /*=========================
     FOOTER

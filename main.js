@@ -158,7 +158,7 @@ SOBRE MÍ — CAPA QUE SUBE CON EL SCROLL
 
 const aboutStage = document.querySelector(".about-stage");
 const aboutOverlay = document.querySelector(".about-overlay");
-const aboutImage = document.querySelector(".about-background img");
+const aboutImages = document.querySelectorAll(".about-background img");
 const aboutBio = document.querySelector(".about-bio");
 const aboutDetails = document.querySelector(".about-details");
 
@@ -245,21 +245,51 @@ if (skillChips.length && aboutDetails) {
 
     } else {
 
-        const DROP_START_Y = -220;
+        /* Una sola fila, de izquierda a derecha, con la
+           cuerda alternando corta/larga (como banderines) */
 
-        const chipStates = skillChips.map((el, i) => ({
-            el,
-            y: DROP_START_Y,
-            velocityY: 0,
-            x: 0,
-            velocityX: 0,
-            angle: (Math.random() - 0.5) * 10,
-            angularVelocity: 0,
-            restAngle: (Math.random() - 0.5) * 16,
-            restX: (Math.random() - 0.5) * 22,
-            released: false,
-            index: i
-        }));
+        const n = skillChips.length;
+        const leftMargin = 8;
+        const rightMargin = 92;
+
+        const ropeTopPercent = 14;
+        const shortDrop = 4;
+        const longDrop = 15;
+
+        const chipStates = skillChips.map((el, i) => {
+
+            const leftPercent =
+                n > 1
+                    ? leftMargin + (rightMargin - leftMargin) * (i / (n - 1))
+                    : (leftMargin + rightMargin) / 2;
+
+            const isShort = i % 2 === 0;
+            const topPercent = ropeTopPercent + (isShort ? shortDrop : longDrop);
+            const threadLenRest = isShort ? 26 : 90;
+
+            const dropStartY = -(600 + Math.random() * 400);
+
+            el.style.left = `${leftPercent.toFixed(1)}%`;
+            el.style.top = `${topPercent.toFixed(1)}%`;
+            el.style.fontSize = `${(24 + Math.random() * 10).toFixed(0)}px`;
+
+            return {
+                el,
+                dropStartY,
+                threadLenRest,
+                y: dropStartY,
+                velocityY: 0,
+                x: 0,
+                velocityX: 0,
+                angle: (Math.random() - 0.5) * 8,
+                angularVelocity: 0,
+                restAngle: (Math.random() - 0.5) * 10,
+                restX: 0,
+                released: false,
+                index: i
+            };
+
+        });
 
         let chipsVisible = false;
         let chipScrollVelocity = 0;
@@ -276,14 +306,14 @@ if (skillChips.length && aboutDetails) {
 
                 setTimeout(() => {
 
-                    state.y = DROP_START_Y;
+                    state.y = state.dropStartY;
                     state.velocityY = 0;
-                    state.x = state.restX * 0.3;
+                    state.x = 0;
                     state.velocityX = 0;
-                    state.angularVelocity = (Math.random() - 0.5) * 140;
+                    state.angularVelocity = (Math.random() - 0.5) * 120;
                     state.released = true;
 
-                }, state.index * 90);
+                }, state.index * 110);
 
             });
 
@@ -347,8 +377,10 @@ if (skillChips.length && aboutDetails) {
                 state.el.style.transform =
                     `translate(${state.x.toFixed(1)}px, ${state.y.toFixed(1)}px) rotate(${state.angle.toFixed(2)}deg)`;
 
-                /* el hilo se estira mientras cae */
-                const threadLen = 26 + Math.max(0, -state.y) * 0.6;
+                /* el hilo se estira mientras cae, y se asienta
+                   en su largo de reposo (corto o largo) al terminar */
+                const fallExtra = Math.max(0, -state.y) * 0.6;
+                const threadLen = state.threadLenRest + fallExtra;
                 state.el.style.setProperty("--thread-len", `${threadLen.toFixed(1)}px`);
 
             });
@@ -414,17 +446,22 @@ if (aboutStage && aboutOverlay) {
         la imagen se va desenfocando.
         */
 
-        if (aboutImage) {
+        if (aboutImages.length) {
 
             const blur = overlayProgress * 8;
 
             const scale = 1 + (overlayProgress * 0.04);
 
-            aboutImage.style.filter =
-                `blur(${blur}px)`;
+            aboutImages.forEach((img) => {
 
-            aboutImage.style.transform =
-                `scale(${scale})`;
+                img.style.filter =
+                    `blur(${blur}px)`;
+
+                img.style.transform =
+                    `scale(${scale})`;
+
+            });
+
         }
 
 
@@ -683,5 +720,50 @@ if (revealWordsEls.length) {
         revealWordsEls.forEach((el) => wordObserver.observe(el));
 
     }
+
+}
+
+/*=========================================================
+MODO CLARO / OSCURO
+El estado inicial ya lo aplica un script en el <head> (para
+evitar el parpadeo). Aquí solo gestionamos el clic y guardamos
+la preferencia para que se recuerde en las demás páginas.
+=========================================================*/
+
+const themeToggle = document.getElementById("themeToggle");
+
+function updateThemeToggleLabel() {
+
+    if (!themeToggle) return;
+
+    const isLight = document.documentElement.getAttribute("data-theme") === "light";
+
+    themeToggle.textContent = isLight ? "☾" : "☀";
+    themeToggle.setAttribute(
+        "aria-label",
+        isLight ? "Cambiar a modo oscuro" : "Cambiar a modo claro"
+    );
+
+}
+
+updateThemeToggleLabel();
+
+if (themeToggle) {
+
+    themeToggle.addEventListener("click", () => {
+
+        const isLight = document.documentElement.getAttribute("data-theme") === "light";
+
+        if (isLight) {
+            document.documentElement.removeAttribute("data-theme");
+            try { localStorage.setItem("laulo-theme", "dark"); } catch (e) {}
+        } else {
+            document.documentElement.setAttribute("data-theme", "light");
+            try { localStorage.setItem("laulo-theme", "light"); } catch (e) {}
+        }
+
+        updateThemeToggleLabel();
+
+    });
 
 }

@@ -7,7 +7,9 @@
 
     <title>Trabajos — Laura Lozano</title>
 
-    <link rel="stylesheet" href="style.css">
+    <script>(function(){try{var t=localStorage.getItem('laulo-theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();</script>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,6 +22,7 @@
 
 <body class="works-body">
 <div class="cursor"></div>
+<canvas id="blobCanvas"></canvas>
     <!-- NAV -->
 
     <nav class="menu">
@@ -28,10 +31,13 @@
             LAULO
         </a>
 
-        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+        <div class="nav-actions">
+    <button class="theme-toggle" id="themeToggle" aria-label="Cambiar a modo claro">☾</button>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
             <span></span>
             <span></span>
         </button>
+  </div>
 
     </nav>
 
@@ -212,21 +218,6 @@
 
         </div>
 
-        <!-- CIERRE / CONTACTO -->
-        <footer class="cta" id="contacto">
-        <div class="cta-social mono">
-            <a href="#">Instagram</a>
-            <a href="#">LinkedIn</a>
-        </div>
-
-        <h2 class="cta-title reveal-words scroll-reactive">nos vemos pronto :)</h2>
-        <a href="mailto:hola@lauralozano.com" class="cta-link">laulo.graphics@gmail.com</a>
-
-        <div class="cta-bottom mono">
-            <span>Madrid, España</span>
-            <span>© 2026 Laura Lozano</span>
-        </div>
-        </footer>   
 
     </main>
 
@@ -347,8 +338,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 });
-
-
 
 </script>
 

@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sesión fotográfica Twink Peaks</title>
+<script>(function(){try{var t=localStorage.getItem('laulo-theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();</script>
 <link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@300;400;500;700;800&display=swap" rel="stylesheet">
@@ -13,16 +15,20 @@
 <body>
 
 <div class="cursor" id="cursor"></div>
+<canvas id="blobCanvas"></canvas>
 
 <!-- NAV -->
 <nav class="menu">
 
   <a href="index.html" class="logo">LAULO</a>
 
-  <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+  <div class="nav-actions">
+    <button class="theme-toggle" id="themeToggle" aria-label="Cambiar a modo claro">☾</button>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
     <span></span>
     <span></span>
   </button>
+  </div>
 
 </nav>
 
@@ -158,8 +164,8 @@
     <a href="#">LinkedIn</a>
   </div>
 
-  <h2 class="cta-title reveal-words scroll-reactive">nos vemos pronto :)</h2>
-  <a href="mailto:hola@lauralozano.com" class="cta-link">laulo.graphics@gmail.com</a>
+  <h2 class="cta-title reveal-words scroll-reactive">nos vemos pronto</h2>
+  <a href="mailto:hola@lauralozano.com" class="cta-link">hola@lauralozano.com</a>
 
   <div class="cta-bottom mono">
     <span>Madrid, España</span>
