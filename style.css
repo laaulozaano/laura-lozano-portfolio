@@ -906,91 +906,58 @@ SERVICIOS + HERRAMIENTAS
 
 .about-details{
 
-    position:absolute;
-    inset:0;
+    margin-top:auto;
 
-    width:100%;
-    height:100%;
+    display:grid;
 
-    opacity:0;
-    pointer-events:none;
+    grid-template-columns:1fr 1fr;
 
-    transition:opacity .4s ease;
+    gap:60px;
 
-    z-index:5;
-}
+    padding-top:40px;
 
-.about-details.is-visible{
-    opacity:1;
-    pointer-events:auto;
-}
-
-/* la cuerda de la que cuelgan todos */
-.about-details::before{
-    content:"";
-    position:absolute;
-    top:14%;
-    left:8%;
-    right:8%;
-    height:1px;
-    background:var(--line);
+    border-top:1px solid var(--line);
 }
 
 
-/* ya no organiza en columnas: solo agrupa en el DOM */
 .about-detail{
-    display:contents;
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    align-items:center;
+
+    gap:8px;
+
+    min-width:0;
 }
 
 
 .about-detail .mono{
-    display:none;
+
+    width:100%;
+
+    color:var(--fg-soft);
+
+    margin-bottom:8px;
 }
 
 
 .about-detail span{
 
-    position:absolute;
-
-    font-size:24px;
+    font-size:13px;
 
     color:var(--fg);
 
-    padding:0.55em 1.05em;
+    padding-right:12px;
 
-    border:1px solid rgba(0,0,0,.15);
-    border-radius:100px;
-
-    box-shadow:0 8px 20px rgba(0,0,0,.35);
-
-    transform-origin:top center;
-
-    transition:filter .25s ease;
+    border-right:1px solid var(--line);
 }
 
-.about-detail span:hover{
-    filter:brightness(1.12);
-}
 
-/* paleta de colores, uno distinto cada 6 chips */
-
-.about-detail span:nth-of-type(6n+1){ background:#2F7FE0; }
-.about-detail span:nth-of-type(6n+2){ background:#FF6F3C; }
-.about-detail span:nth-of-type(6n+3){ background:#2FAE8C; }
-.about-detail span:nth-of-type(6n+4){ background:#F5C84C; color:#1a1a18; }
-.about-detail span:nth-of-type(6n+5){ background:#E0559B; }
-.about-detail span:nth-of-type(6n+6){ background:#8B5FE0; }
-
-/* el hilo del que cuelga, se estira mientras cae */
-.about-detail span::before{
-    content:"";
-    position:absolute;
-    top:calc(-1 * var(--thread-len, 26px));
-    left:50%;
-    width:1px;
-    height:var(--thread-len, 26px);
-    background:var(--line);
-    transform:translateX(-50%);
+.about-detail span:last-child{
+    border-right:0;
 }
 
 /*=========================
@@ -1782,8 +1749,8 @@ RESPONSIVE INDEX
     width:auto;
     height:auto;
 
-    max-width:min(300px,68vw);
-    max-height:58vh;
+    max-width:min(420px,88vw);
+    max-height:68vh;
 
     object-fit:contain;
 
@@ -1839,8 +1806,38 @@ RESPONSIVE INDEX
 }
 
 
-/* DETALLES — la posición y tamaño de cada chip los pone JS,
-   aquí no hace falta nada extra en móvil */
+/* DETALLES */
+
+.about-details{
+
+    grid-template-columns:1fr;
+
+    gap:24px;
+
+    padding-top:25px;
+
+}
+
+
+.about-detail{
+
+    gap:7px;
+
+}
+
+
+.about-detail .mono{
+
+    margin-bottom:4px;
+
+}
+
+
+.about-detail span{
+
+    font-size:12px;
+
+}
 
     /*=========================
     FOOTER
@@ -2125,6 +2122,49 @@ PÁGINA DE DETALLE DE PROYECTO
     height: auto;
     display: block;
     object-fit: contain;
+}
+
+/*=========================================================
+BOTÓN DE SONIDO EN VÍDEO
+Para vídeos con audio que arrancan silenciados por autoplay,
+un botón pequeño para activar/quitar el sonido.
+=========================================================*/
+
+.video-with-sound{
+    position:relative;
+}
+
+.video-sound-toggle{
+    position:absolute;
+    bottom:18px;
+    right:18px;
+
+    width:26px;
+    height:26px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border:0;
+    background:transparent;
+
+    color:#fff;
+    opacity:.55;
+
+    cursor:none;
+    z-index:3;
+
+    transition:opacity .25s ease;
+}
+
+.video-sound-toggle svg{
+    width:18px;
+    height:18px;
+}
+
+.video-sound-toggle:hover{
+    opacity:1;
 }
 
 

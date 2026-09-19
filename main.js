@@ -218,183 +218,6 @@ if (aboutBio) {
 
 }
 
-/*=========================================================
-CHIPS COLGANDO — físicas de péndulo amortiguado
-Cada chip cuelga de un hilo y cae + oscila con inercia real
-al mostrarse, y se esconden si se vuelve a subir en el scroll.
-=========================================================*/
-
-const skillChips = Array.from(
-    document.querySelectorAll(".about-detail span")
-);
-
-let showChips = () => {};
-let hideChips = () => {};
-
-if (skillChips.length && aboutDetails) {
-
-    if (prefersReducedMotion) {
-
-        showChips = () => {
-            aboutDetails.classList.add("is-visible");
-        };
-
-        hideChips = () => {
-            aboutDetails.classList.remove("is-visible");
-        };
-
-    } else {
-
-        /* Una sola fila, de izquierda a derecha, con la
-           cuerda alternando corta/larga (como banderines) */
-
-        const n = skillChips.length;
-        const leftMargin = 8;
-        const rightMargin = 92;
-
-        const ropeTopPercent = 14;
-        const shortDrop = 4;
-        const longDrop = 15;
-
-        const chipStates = skillChips.map((el, i) => {
-
-            const leftPercent =
-                n > 1
-                    ? leftMargin + (rightMargin - leftMargin) * (i / (n - 1))
-                    : (leftMargin + rightMargin) / 2;
-
-            const isShort = i % 2 === 0;
-            const topPercent = ropeTopPercent + (isShort ? shortDrop : longDrop);
-            const threadLenRest = isShort ? 26 : 90;
-
-            const dropStartY = -(600 + Math.random() * 400);
-
-            el.style.left = `${leftPercent.toFixed(1)}%`;
-            el.style.top = `${topPercent.toFixed(1)}%`;
-            el.style.fontSize = `${(24 + Math.random() * 10).toFixed(0)}px`;
-
-            return {
-                el,
-                dropStartY,
-                threadLenRest,
-                y: dropStartY,
-                velocityY: 0,
-                x: 0,
-                velocityX: 0,
-                angle: (Math.random() - 0.5) * 8,
-                angularVelocity: 0,
-                restAngle: (Math.random() - 0.5) * 10,
-                restX: 0,
-                released: false,
-                index: i
-            };
-
-        });
-
-        let chipsVisible = false;
-        let chipScrollVelocity = 0;
-        let lastChipScrollY = window.scrollY;
-
-        showChips = () => {
-
-            if (chipsVisible) return;
-            chipsVisible = true;
-
-            aboutDetails.classList.add("is-visible");
-
-            chipStates.forEach((state) => {
-
-                setTimeout(() => {
-
-                    state.y = state.dropStartY;
-                    state.velocityY = 0;
-                    state.x = 0;
-                    state.velocityX = 0;
-                    state.angularVelocity = (Math.random() - 0.5) * 120;
-                    state.released = true;
-
-                }, state.index * 110);
-
-            });
-
-        };
-
-        hideChips = () => {
-
-            if (!chipsVisible) return;
-            chipsVisible = false;
-
-            aboutDetails.classList.remove("is-visible");
-
-            chipStates.forEach((state) => {
-                state.released = false;
-            });
-
-        };
-
-        function chipsPhysicsLoop() {
-
-            const currentScrollY = window.scrollY;
-            const rawVel = currentScrollY - lastChipScrollY;
-            lastChipScrollY = currentScrollY;
-            chipScrollVelocity += (rawVel - chipScrollVelocity) * 0.15;
-
-            const scrollTorque =
-                Math.max(-30, Math.min(30, chipScrollVelocity * 0.8));
-
-            chipStates.forEach((state) => {
-
-                if (!state.released) return;
-
-                /* caída vertical, como si tirase de ella la gravedad
-                   y el hilo la frenase de golpe */
-                const ySpring = 0.02;
-                const yDamping = 0.82;
-
-                state.velocityY += -state.y * ySpring;
-                state.velocityY *= yDamping;
-                state.y += state.velocityY;
-
-                /* deriva lateral hasta su posición de reposo */
-                const xSpring = 0.02;
-                const xDamping = 0.85;
-
-                state.velocityX += (state.restX - state.x) * xSpring;
-                state.velocityX *= xDamping;
-                state.x += state.velocityX;
-
-                /* balanceo, como un cartel colgado, hasta su
-                   propio ángulo de reposo (no todos a cero) */
-                const angleSpring = 0.012;
-                const angleDamping = 0.92;
-
-                state.angularVelocity +=
-                    ((state.restAngle - state.angle) * angleSpring) +
-                    (scrollTorque * 0.01);
-                state.angularVelocity *= angleDamping;
-                state.angle += state.angularVelocity;
-
-                state.el.style.transform =
-                    `translate(${state.x.toFixed(1)}px, ${state.y.toFixed(1)}px) rotate(${state.angle.toFixed(2)}deg)`;
-
-                /* el hilo se estira mientras cae, y se asienta
-                   en su largo de reposo (corto o largo) al terminar */
-                const fallExtra = Math.max(0, -state.y) * 0.6;
-                const threadLen = state.threadLenRest + fallExtra;
-                state.el.style.setProperty("--thread-len", `${threadLen.toFixed(1)}px`);
-
-            });
-
-            requestAnimationFrame(chipsPhysicsLoop);
-
-        }
-
-        requestAnimationFrame(chipsPhysicsLoop);
-
-    }
-
-}
-
 if (aboutStage && aboutOverlay) {
 
     function updateAbout() {
@@ -422,8 +245,8 @@ if (aboutStage && aboutOverlay) {
         /*
         Separamos el recorrido en dos tramos:
         - overlayProgress: sube la capa (primer 40% del scroll)
-        - readProgress: colorea el texto y saca los chips,
-          durante el 60% restante, cuando ya se puede leer.
+        - readProgress: colorea el texto, durante el 60%
+          restante, cuando ya se puede leer.
         */
 
         const overlayProgress = Math.max(0, Math.min(1, progress / 0.4));
@@ -484,18 +307,6 @@ if (aboutStage && aboutOverlay) {
 
             }
 
-        }
-
-
-        /*
-        Los chips de Servicios/Herramientas se sueltan
-        cerca del final de ese mismo tramo de lectura.
-        */
-
-        if (readProgress > 0.7) {
-            showChips();
-        } else {
-            hideChips();
         }
 
     }
@@ -767,3 +578,45 @@ if (themeToggle) {
     });
 
 }
+
+/*=========================================================
+BOTÓN DE SONIDO EN VÍDEO
+=========================================================*/
+
+const ICON_MUTED = `
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+  <polygon points="3 9 7 9 12 4 12 20 7 15 3 15" fill="currentColor" stroke="none"/>
+  <line x1="16" y1="9" x2="22" y2="15"/>
+  <line x1="22" y1="9" x2="16" y2="15"/>
+</svg>`;
+
+const ICON_UNMUTED = `
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+  <polygon points="3 9 7 9 12 4 12 20 7 15 3 15" fill="currentColor" stroke="none"/>
+  <path d="M16 9c1.5 1.2 1.5 4.8 0 6"/>
+  <path d="M18.5 6.5c2.5 2.2 2.5 8.8 0 11"/>
+</svg>`;
+
+document.querySelectorAll(".video-with-sound").forEach((wrap) => {
+
+    const video = wrap.querySelector("video");
+    const btn = wrap.querySelector(".video-sound-toggle");
+
+    if (!video || !btn) return;
+
+    const updateIcon = () => {
+        btn.innerHTML = video.muted ? ICON_MUTED : ICON_UNMUTED;
+        btn.setAttribute(
+            "aria-label",
+            video.muted ? "Activar sonido" : "Silenciar"
+        );
+    };
+
+    updateIcon();
+
+    btn.addEventListener("click", () => {
+        video.muted = !video.muted;
+        updateIcon();
+    });
+
+});
