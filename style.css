@@ -2150,7 +2150,10 @@ un botón pequeño para activar/quitar el sonido.
     background:transparent;
 
     color:#fff;
-    opacity:.55;
+    filter:
+        drop-shadow(0 0 3px rgba(0,0,0,.85))
+        drop-shadow(0 1px 2px rgba(0,0,0,.85));
+    opacity:.85;
 
     cursor:none;
     z-index:3;
