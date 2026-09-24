@@ -106,17 +106,17 @@ if (canHover) {
 
     const heroSection = document.querySelector(".hero");
     const trailImages = [
-        "img/mamatfg.png",
-        "img/LOZANO.LAURA_3.1_ZAPATILLA_RENDERL1.jpg",
-        "img/CASICASI3.jpg",
-        "img/portada libro.png",
-        "img/mockup cerveza cabeza.png",
-        "img/Log-Lady.jpg",
-        "img/FOLLETO.png",
-        "img/0_0056.png",
-        "img/mockup latas.jpg",
-        "img/caja grande.png",
-        "img/MK2.png",
+        "img/mamatfg.webp",
+        "img/LOZANO.LAURA_3.1_ZAPATILLA_RENDERL1.webp",
+        "img/CASICASI3.webp",
+        "img/portada libro.webp",
+        "img/mockup cerveza cabeza.webp",
+        "img/Log-Lady.webp",
+        "img/FOLLETO.webp",
+        "img/0_0056.webp",
+        "img/mockup latas.webp",
+        "img/caja grande.webp",
+        "img/MK2.webp",
     ];
 
     let trailIndex = 0;
